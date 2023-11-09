@@ -1,11 +1,18 @@
 import { Slot } from 'expo-router'
-import React from 'react'
+import { StyleSheet } from 'react-native'
 
 
 function _layout() {
   return (
-    <Slot/>
+    <Slot />
   )
 }
+
+const styles = StyleSheet.create({
+  layout:{
+    borderColor: 'red',
+    borderWidth: 1,
+  }
+})
 
 export default _layout
