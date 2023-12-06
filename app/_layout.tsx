@@ -5,16 +5,18 @@ import { DarkTheme, DefaultTheme, DrawerNavigationState, ParamListBase, ThemePro
 import { useFonts } from 'expo-font';
 import { SplashScreen } from 'expo-router';
 import { useColorScheme, StyleSheet } from 'react-native';
-import WoodenDesks from './collections/WoodenDesks';
-import { createDrawerNavigator, DrawerContentScrollView, DrawerItem, DrawerItemList } from '@react-navigation/drawer';
-import ModalScreen from './modal';
+import { DrawerContentScrollView, DrawerItemList } from '@react-navigation/drawer';
 import { DrawerDescriptorMap, DrawerNavigationHelpers } from '@react-navigation/drawer/lib/typescript/src/types';
 import { View, Text } from '../components/Themed';
 import { drawerMenu } from '../constants/constants';
 import { TouchableNativeFeedback, TouchableOpacity } from 'react-native-gesture-handler';
 import SubMenu from '../components/SubMenu';
 import { Ionicons } from '@expo/vector-icons'
-import { Svg, Path, G } from 'react-native-svg';
+import { BrandLogoDark } from '../components/BrandLogo';
+import Header from '../components/Header';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { Drawer } from 'expo-router/drawer';
+
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -23,7 +25,7 @@ export {
 
 export const unstable_settings = {
   // Ensure that reloading on `/modal` keeps a back button present.
-  initialRouteName: '(modal)',
+  initialRouteName: '(/collections/woodenDesks)',
 };
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
@@ -50,40 +52,12 @@ export default function RootLayout() {
     return null;
   }
 
-  return <RootLayoutNav />;
-}
-
-
-
-const Drawer = createDrawerNavigator()
-function RootLayoutNav() {
-  const colorScheme = useColorScheme();
-
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-
-
-      <Drawer.Navigator
-
-        screenOptions={{
-          drawerType: 'slide',
-        }}
-        drawerContent={(props) => <CustomDrawer {...props} />}
-      >
-
-
-        <Drawer.Screen name="collections" component={WoodenDesks} />
-
-        <Drawer.Screen name="modal" component={ModalScreen} />
-
-
-      </Drawer.Navigator>
-
-
-    </ThemeProvider>
-  );
+    <SafeAreaView style={styles.safeArea}>
+      <RootLayoutNav />
+    </SafeAreaView>
+  )
 }
-
 
 type Props = {
   state: DrawerNavigationState<ParamListBase>;
@@ -91,7 +65,46 @@ type Props = {
   descriptors: DrawerDescriptorMap;
 }
 
+
+
+function RootLayoutNav() {
+  const colorScheme = useColorScheme();
+
+  return (
+    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+
+
+      <Drawer
+        initialRouteName='/collections/woodenDesks'
+
+        screenOptions={{
+          drawerType: 'slide',
+          header: ({ navigation }) => <Header {...navigation} />,
+
+
+        }}
+        drawerContent={(props: Props) => <CustomDrawer {...props} />}
+      >
+
+
+
+        <Drawer.Screen name="collections" />
+
+        <Drawer.Screen name="modal" />
+
+
+      </Drawer>
+
+
+    </ThemeProvider>
+  );
+}
+
+
+
+
 const inicialState: number = -1
+
 function CustomDrawer(props: Props) {
 
   const [menuIndex, setMenuIndex] = useState(inicialState)
@@ -107,11 +120,11 @@ function CustomDrawer(props: Props) {
         <View style={styles.dropdawnContainer} >
 
           <View style={styles.iconClose}>
-          <TouchableOpacity
-          onPress={()=> { props.navigation.closeDrawer() }}
-          >
-            <Ionicons name='close' size={35} />
-          </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => { props.navigation.closeDrawer() }}
+            >
+              <Ionicons name='close' size={35} />
+            </TouchableOpacity>
           </View>
 
 
@@ -154,19 +167,13 @@ function CustomDrawer(props: Props) {
         </View>
 
 
-        {/* <DrawerItemList {...props} /> */}
+        <DrawerItemList {...props} />
 
 
         <View style={styles.drawerFooter}>
 
-          <View>
-            <TouchableOpacity >
+          <BrandLogoDark />
 
-              <Svg width="40" height="40" viewBox="0 0 120 120" ><G fill="none" fill-rule="evenodd"><Path d="M120 0v120H0V0h120ZM77.143 37.333H42.857l-.378.003C30.025 37.536 20 47.61 20 60.016c0 12.405 10.025 22.478 22.479 22.678l.378.003h11.429l22.857-45.364Zm22.857 0H77.143v45.364L100 37.333Z" fill="#1A1A1A"></Path></G></Svg>
-
-            </TouchableOpacity>
-
-          </View>
 
           <View style={styles.footerSocialMedia}>
             <TouchableOpacity >
@@ -196,12 +203,16 @@ function CustomDrawer(props: Props) {
 
 
 const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1
+  },
   drawer: {
     flex: 1,
   },
   drawerContainer: {
     flex: 1,
     alignItems: 'center',
+    paddingTop: 15,
   },
   dropdawnContainer: {
     minHeight: '60%',
@@ -214,7 +225,6 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     flexDirection: 'row',
     alignSelf: 'flex-end',
-    justifyContent: 'flex-end',
   },
   drawerItem: {
     width: '94%',
@@ -234,10 +244,9 @@ const styles = StyleSheet.create({
     width: '80%',
   },
   title: {
-    fontFamily: 'Montserrat',
+
     fontWeight: '800',
     fontSize: 30,
-    color: '#222222',
   },
   iconTitle: {
     alignSelf: 'center',
@@ -247,7 +256,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     alignContent: 'center',
     width: '100%',
-    // marginBottom: 20,
     marginVertical: 10,
     borderRadius: 4,
     rowGap: 20,

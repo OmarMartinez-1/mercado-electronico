@@ -1,9 +1,9 @@
 const tintColorLight = '#2f95dc';
 const tintColorDark = '#fff';
 
-export default {
+export default  {
   light: {
-    text: '#222',
+    text: '#222222',
     background: '#fafafa',
     tint: tintColorLight,
     tabIconDefault: '#ccc',
@@ -17,3 +17,8 @@ export default {
     tabIconSelected: tintColorDark,
   },
 };
+
+export const DefaultStyle = {
+  fontSize: 14,
+  fontFamily: 'Montserrat',
+}

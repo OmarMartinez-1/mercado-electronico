@@ -1,11 +1,13 @@
-import { Text, View } from '../../components/Themed'
+import { woodenDesks } from '../../constants/constants'
+import CollectionsScreen from '../../components/CollectionsScreen'
 
 function WoodenDesks() {
   return (
-    <View>
-        <Text>desks page</Text>
-    </View>
+
+      <CollectionsScreen dataScreens={woodenDesks} />
+
   )
 }
+
 
 export default WoodenDesks

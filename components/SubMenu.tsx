@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { View, Text } from './Themed'
-import { StyleSheet } from 'react-native'
+import { StyleSheet} from 'react-native'
+import { Link } from 'expo-router';
 
 
 
@@ -49,7 +50,14 @@ function SubMenu({ menuList }: { menuList: MenuList[] }): React.ReactNode {
                                 item.screens.map((menuItem: any, index: any) => {
                                     return (
                                         <View style={styles.screen} key={index}>
-                                            <Text >{menuItem.screen}</Text>
+
+                                            <TouchableOpacity>
+                                            <Link href={menuItem.path??'/modal'} asChild>
+                                                <Text >{menuItem.screen}</Text>
+                                            </Link>
+
+                                            </TouchableOpacity>
+
                                         </View>
 
                                     )
@@ -89,7 +97,7 @@ const styles = StyleSheet.create({
         marginVertical: 10,
         marginLeft: 40,
     },
-    sectionsContainer:{
+    sectionsContainer: {
         marginVertical: 5,
     }
 })
